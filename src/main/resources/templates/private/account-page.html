@@ -3,8 +3,10 @@
 <head>
     <title>ToDo List</title>
     <link href="/css/private/account-page.css" rel="stylesheet">
+    <link href="/css/fragments/header-fragment.css" rel="stylesheet">
 </head>
 <body>
+<div th:replace="fragments/header-fragment.html :: header-fragment (userName=${userName})"></div>
 <div class="page-wrapper">
     <div class="container">
         <div class="header-container">

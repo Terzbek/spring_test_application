@@ -1,26 +1,33 @@
 package ru.codekitchen.controller.secured;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.codekitchen.entity.RecordStatus;
+import ru.codekitchen.entity.User;
 import ru.codekitchen.entity.dto.RecordsContainerDto;
 import ru.codekitchen.service.RecordService;
+import ru.codekitchen.service.UserService;
 
 @Controller
 @RequestMapping("/account")
 public class PrivateAccountController {
+    private final UserService userService;
     private final RecordService recordService;
 
-    public PrivateAccountController(RecordService recordService) {
+    @Autowired
+    public PrivateAccountController(UserService userService, RecordService recordService) {
+        this.userService = userService;
         this.recordService = recordService;
     }
 
-
     @GetMapping
     public String getMainPage(Model model, @RequestParam(name = "filter", required = false) String filterMode) {
+        User user = userService.getCurrentUser();
         RecordsContainerDto container = recordService.findAllRecords(filterMode);
+        model.addAttribute("userName", user.getName());
         model.addAttribute("records", container.getRecords());
         model.addAttribute("numberOfDoneRecords", container.getNumberOfDoneRecords());
         model.addAttribute("numberOfActiveRecords", container.getNumberOfActiveRecords());
